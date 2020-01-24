@@ -36,29 +36,23 @@ _publishToGit() {
     exit 1
   fi;
 
-  _log "pushd ${GIT_CLONE_PATH}"
-  pushd ${GIT_CLONE_PATH}
+  _log "git checkout -f ${GIT_BRANCH}"
+  git -C "${GIT_CLONE_PATH}" checkout -f "${GIT_BRANCH}"
 
-  _log "checkout -f ${GIT_BRANCH}"
-  git checkout -f "${GIT_BRANCH}"
-
-  _log "git pull"
-  git pull
+  _log "git pull --prune"
+  git -C "${GIT_CLONE_PATH}" pull --prune
 
   _log "cp ${SRC_TMP_FILE} ${GIT_CLONE_PATH}${GIT_PATH}"
   cp "${SRC_TMP_FILE}" "${GIT_CLONE_PATH}${GIT_PATH}"
 
   _log "git add ${GIT_CLONE_PATH}${GIT_PATH}"
-  git add "${GIT_CLONE_PATH}${GIT_PATH}"
+  git -C "${GIT_CLONE_PATH}" add "${GIT_CLONE_PATH}${GIT_PATH}"
 
   _log "git commit -m ${GIT_COMMIT_MSG}"
-  git commit -m "${GIT_COMMIT_MSG}"
+  git -C "${GIT_CLONE_PATH}" commit -m "${GIT_COMMIT_MSG}"
 
   _log "git push"
-  git push
-
-  _log "popd"
-  popd
+  git -C "${GIT_CLONE_PATH}" push
 }
 
 
